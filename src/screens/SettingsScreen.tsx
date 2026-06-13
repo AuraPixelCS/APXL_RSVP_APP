@@ -13,6 +13,7 @@ import {
 import { useAppContext } from '../context/AppContext';
 import { colors } from '../theme/colors';
 import { Save } from 'lucide-react-native';
+import { version as appVersion } from '../../package.json';
 
 export default function SettingsScreen() {
   const { eventId, setEventId, serverUrl, setServerUrl } = useAppContext();
@@ -35,8 +36,8 @@ export default function SettingsScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <View style={styles.header}>
-        <Image 
-          source={require('../../assets/images/ap-nav.png')} 
+        <Image
+          source={require('../../assets/images/ap-logo.png')}
           style={styles.logo}
           resizeMode="contain"
         />
@@ -50,7 +51,7 @@ export default function SettingsScreen() {
             style={styles.input}
             value={localServerUrl}
             onChangeText={setLocalServerUrl}
-            placeholder="https://aurapixel.live/rsvp"
+            placeholder="https://www.aurapixel.live/rsvp"
             placeholderTextColor={colors.textMuted}
             autoCapitalize="none"
             keyboardType="url"
@@ -75,6 +76,8 @@ export default function SettingsScreen() {
           <Save color="#fff" size={20} style={{ marginRight: 8 }} />
           <Text style={styles.saveButtonText}>Save Settings</Text>
         </TouchableOpacity>
+
+        <Text style={styles.versionText}>App Version v{appVersion}</Text>
       </View>
     </KeyboardAvoidingView>
   );
@@ -92,7 +95,8 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border,
   },
   logo: {
-    height: 40,
+    width: 80,
+    height: 80,
     marginBottom: 20,
   },
   title: {
@@ -139,5 +143,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  versionText: {
+    color: colors.textMuted,
+    fontSize: 12,
+    textAlign: 'center',
+    marginTop: 24,
   },
 });

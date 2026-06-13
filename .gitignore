@@ -24,6 +24,8 @@ xcuserdata
 DerivedData
 *.hmap
 *.ipa
+*.apk
+*.aab
 *.xcuserstate
 **/.xcode.env.local
 
@@ -38,6 +40,7 @@ local.properties
 .cxx/
 *.keystore
 !debug.keystore
+android/keystore.properties
 .kotlin/
 
 # node.js

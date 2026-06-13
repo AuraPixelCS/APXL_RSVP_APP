@@ -1,10 +1,11 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { Camera, Users, Settings } from 'lucide-react-native';
+import { Camera, Users, Map, Settings } from 'lucide-react-native';
 
 import HomeScreen from '../screens/HomeScreen';
 import GuestListScreen from '../screens/GuestListScreen';
+import MapScreen from '../screens/MapScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import { colors } from '../theme/colors';
 
@@ -44,16 +45,24 @@ export default function AppNavigator() {
             headerTitle: 'RSVP Scanner'
           }}
         />
-        <Tab.Screen 
-          name="Guests" 
-          component={GuestListScreen} 
+        <Tab.Screen
+          name="Guests"
+          component={GuestListScreen}
           options={{
             tabBarIcon: ({ color, size }) => <Users color={color} size={size} />,
             headerTitle: 'Guest List'
           }}
         />
-        <Tab.Screen 
-          name="Settings" 
+        <Tab.Screen
+          name="Map"
+          component={MapScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => <Map color={color} size={size} />,
+            headerTitle: 'Seating Map'
+          }}
+        />
+        <Tab.Screen
+          name="Settings"
           component={SettingsScreen} 
           options={{
             tabBarIcon: ({ color, size }) => <Settings color={color} size={size} />,

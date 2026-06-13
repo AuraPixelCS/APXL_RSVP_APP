@@ -25,6 +25,7 @@ interface Guest {
   phone?: string;
   status: string;
   seatNumber?: string | number;
+  seatLabel?: string | null;
   attending?: boolean;
   plusOne?: boolean;
   plusOneName?: string;
@@ -124,15 +125,26 @@ export default function GuestListScreen() {
       setLoading(false);
       return;
     }
+    const url = `${serverUrl}/api/scanner/guests?eventId=${eventId}`;
     try {
-      const response = await axios.get(`${serverUrl}/api/scanner/guests?eventId=${eventId}`);
+      const response = await axios.get(url);
       if (response.data.success) {
         setGuests(response.data.guests);
         setFilteredGuests(response.data.guests);
       }
     } catch (err) {
-      console.error('Failed to fetch guests', err);
-      Alert.alert('Error', 'Failed to load guest list');
+      const e = err as any;
+      const detail = {
+        url,
+        code: e?.code,
+        message: e?.message,
+        status: e?.response?.status,
+      };
+      console.error('Failed to fetch guests', detail);
+      Alert.alert(
+        'Error',
+        `Failed to load guest list\n\nURL: ${url}\nCode: ${e?.code ?? '-'}\nStatus: ${e?.response?.status ?? '-'}\n${e?.message ?? ''}`
+      );
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -159,6 +171,7 @@ export default function GuestListScreen() {
       g.name.toLowerCase().includes(q) ||
       g.email.toLowerCase().includes(q) ||
       (g.seatNumber && g.seatNumber.toString().includes(q)) ||
+      (g.seatLabel && g.seatLabel.toLowerCase().includes(q)) ||
       (g.company && g.company.toLowerCase().includes(q))
     ));
   };
@@ -214,7 +227,7 @@ export default function GuestListScreen() {
             </View>
             {item.seatNumber ? (
               <View style={[styles.badge, { backgroundColor: 'rgba(255,255,255,0.08)' }]}>
-                <Text style={[styles.badgeText, { color: colors.textMuted }]}>Seat {item.seatNumber}</Text>
+                <Text style={[styles.badgeText, { color: colors.textMuted }]}>{item.seatLabel ?? `Seat ${item.seatNumber}`}</Text>
               </View>
             ) : null}
           </View>
@@ -292,7 +305,7 @@ export default function GuestListScreen() {
             {selectedGuest.seatNumber ? (
               <View style={styles.seatBadge}>
                 <Hash size={14} color={colors.primary} style={{ marginRight: 4 }} />
-                <Text style={styles.seatBadgeText}>Seat {selectedGuest.seatNumber}</Text>
+                <Text style={styles.seatBadgeText}>{selectedGuest.seatLabel ?? `Seat ${selectedGuest.seatNumber}`}</Text>
               </View>
             ) : null}
 
